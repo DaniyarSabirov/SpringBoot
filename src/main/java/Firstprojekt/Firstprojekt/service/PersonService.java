@@ -9,8 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
-
 @Service
 public class PersonService {
 
@@ -26,8 +24,6 @@ public class PersonService {
         personRepository.save(person);
         return false;
     }
-
-
 
     public boolean updatePerson(Person newPerson, Long id){
 
