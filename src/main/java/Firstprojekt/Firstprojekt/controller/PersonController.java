@@ -3,6 +3,7 @@ package Firstprojekt.Firstprojekt.controller;
 
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.service.PersonService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class PersonController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPerson(@RequestBody Person person) {
+    public ResponseEntity<String> addPerson(@RequestBody @Valid Person person) {
         boolean exist = personService.addPerson(person);
         if(exist) return ResponseEntity.status(409).body("Person with this ID is already exists");
 
@@ -34,7 +35,7 @@ public class PersonController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePerson(@PathVariable Long id, @RequestBody Person newPerson){
+    public ResponseEntity<String> updatePerson(@PathVariable Long id, @RequestBody @Valid Person newPerson){
 
        boolean updated = personService.updatePerson(newPerson, id);
        if(updated) return ResponseEntity.status(201).body("Person successfully updated");

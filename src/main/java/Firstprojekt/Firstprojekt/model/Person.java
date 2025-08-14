@@ -1,9 +1,7 @@
 package Firstprojekt.Firstprojekt.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
@@ -18,7 +16,14 @@ public class Person {
     private Long id;
 
     @NonNull
+    @NotBlank(message = "{person.name.notBlank}")
+    @Size(min = 2, max = 50, message = "{person.name.size}")
+    @Column(nullable = false)
     private String name;
 
+    @NotNull
+    @Min(value = 0, message = "{person.age.min}")
+    @Max(value = 150, message = "{person.age.max}")
+    @Column(nullable = false)
     private int age;
 }
