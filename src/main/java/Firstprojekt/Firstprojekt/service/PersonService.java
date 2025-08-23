@@ -30,6 +30,8 @@ public class PersonService {
         Person person = personRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
         person.setName(newPerson.getName());
         person.setAge(newPerson.getAge());
+        person.setWorkEmail(newPerson.getWorkEmail());
+        person.setPrivateEmail(newPerson.getPrivateEmail());
 
         personRepository.save(person);
 
