@@ -25,5 +25,22 @@ public class Person {
     @Min(value = 0, message = "{person.age.min}")
     @Max(value = 150, message = "{person.age.max}")
     @Column(nullable = false)
-    private int age;
+    private Integer age;
+
+
+    @NotNull
+    @NotBlank(message = "{person.workEmail.notBlank")
+    @Size(min = 2, max = 50, message = "{person.workEmail.size}")
+    @Email(message = "{person.workEmail.email}")
+    @Column(nullable = false)
+    private String workEmail;
+
+
+    @NotNull
+    @NotBlank(message = "{person.privateEmail.notBlank")
+    @Size(min = 2, max = 50, message = "{person.privateEmail.size}")
+    @Email(message = "{person.privateEmail.email}")
+    @Column(nullable = false)
+    private String privateEmail;
+
 }
