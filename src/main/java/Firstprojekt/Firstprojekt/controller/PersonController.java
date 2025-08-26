@@ -1,6 +1,6 @@
 package Firstprojekt.Firstprojekt.controller;
 
-
+import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.service.PersonService;
 import jakarta.validation.Valid;
@@ -14,44 +14,28 @@ import java.util.List;
 public class PersonController {
 
     private final PersonService personService;
-
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
+    public PersonController(PersonService personService) { this.personService = personService; }
 
     @GetMapping
-    public ResponseEntity<List<Person>> getPeople() {
+    public ResponseEntity<List<PersonResponse>> getPeople() {
         return ResponseEntity.ok(personService.getPeople());
     }
 
-
     @PostMapping("/add")
-    public ResponseEntity<String> addPerson(@RequestBody @Valid Person person) {
-        boolean exist = personService.addPerson(person);
-        if(exist) return ResponseEntity.status(409).body("Person with this ID is already exists");
-
-        return ResponseEntity.status(201).body("Person successfully added");
+    public ResponseEntity<PersonResponse> addPerson(@RequestBody @Valid Person person) {
+        return ResponseEntity.status(201).body(personService.addPerson(person));
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePerson(@PathVariable Long id, @RequestBody @Valid Person newPerson){
-
-       boolean updated = personService.updatePerson(newPerson, id);
-       if(updated) return ResponseEntity.status(201).body("Person successfully updated");
-       return ResponseEntity.status(404).body("Update failed. No such ID");
+    public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long id,
+                                                       @RequestBody @Valid Person newPerson){
+        return ResponseEntity.ok(personService.updatePerson(newPerson, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePerson(@PathVariable Long id) {
         boolean removed = personService.deletePerson(id);
-        if (removed) {
-            return ResponseEntity.ok("Person deleted successfully.");
-        } else {
-            return ResponseEntity.status(404).body("Person not found.");
-        }
+        return removed ? ResponseEntity.ok("Person deleted successfully.")
+                : ResponseEntity.status(404).body("Person not found.");
     }
 }
-
-
-

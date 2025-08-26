@@ -29,7 +29,7 @@ public class Person {
 
 
     @NotNull
-    @NotBlank(message = "{person.workEmail.notBlank")
+    @NotBlank(message = "{person.workEmail.notBlank}")
     @Size(min = 2, max = 50, message = "{person.workEmail.size}")
     @Email(message = "{person.workEmail.email}")
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class Person {
 
 
     @NotNull
-    @NotBlank(message = "{person.privateEmail.notBlank")
+    @NotBlank(message = "{person.privateEmail.notBlank}")
     @Size(min = 2, max = 50, message = "{person.privateEmail.size}")
     @Email(message = "{person.privateEmail.email}")
     @Column(nullable = false)
