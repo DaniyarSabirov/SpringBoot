@@ -1,8 +1,9 @@
 package Firstprojekt.Firstprojekt.service;
 
+import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.repository.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,37 +13,38 @@ import java.util.List;
 @Service
 public class PersonService {
 
-    @Autowired
-    PersonRepository personRepository;
+    private final PersonRepository personRepository;
+    private final ModelMapper mapper;
 
-    public List<Person> getPeople(){
-        return personRepository.findAll();
+    public PersonService(PersonRepository personRepository, ModelMapper mapper) {
+        this.personRepository = personRepository;
+        this.mapper = mapper;
     }
 
-
-    public boolean addPerson(Person person) {
-        personRepository.save(person);
-        return false;
+    public List<PersonResponse> getPeople(){
+        return personRepository.findAll()
+                .stream()
+                .map(p -> mapper.map(p, PersonResponse.class))
+                .toList();
     }
 
-    public boolean updatePerson(Person newPerson, Long id){
+    public PersonResponse addPerson(Person person) {
+        Person saved = personRepository.save(person);
+        return mapper.map(saved, PersonResponse.class);
+    }
 
-        Person person = personRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        person.setName(newPerson.getName());
-        person.setAge(newPerson.getAge());
-        person.setWorkEmail(newPerson.getWorkEmail());
-        person.setPrivateEmail(newPerson.getPrivateEmail());
-
-        personRepository.save(person);
-
-        return true;
+    public PersonResponse updatePerson(Person newPerson, Long id){
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        mapper.map(newPerson, person);
+        Person saved = personRepository.save(person);
+        return mapper.map(saved, PersonResponse.class);
     }
 
     public boolean deletePerson(Long id){
-
-        personRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        personRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         personRepository.deleteById(id);
-
         return true;
     }
 }
