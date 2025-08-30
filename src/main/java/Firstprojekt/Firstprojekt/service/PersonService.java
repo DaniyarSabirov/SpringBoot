@@ -1,5 +1,7 @@
 package Firstprojekt.Firstprojekt.service;
 
+import Firstprojekt.Firstprojekt.dto.PersonCreateRequest;
+import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.repository.PersonRepository;
@@ -28,15 +30,15 @@ public class PersonService {
                 .toList();
     }
 
-    public PersonResponse addPerson(Person person) {
-        Person saved = personRepository.save(person);
+    public PersonResponse addPerson(PersonCreateRequest personDto) {
+        Person saved = personRepository.save(mapper.map(personDto, Person.class));
         return mapper.map(saved, PersonResponse.class);
     }
 
-    public PersonResponse updatePerson(Person newPerson, Long id){
+    public PersonResponse updatePerson(PersonPatchRequest personDto, Long id){
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        mapper.map(newPerson, person);
+        mapper.map(personDto, person);
         Person saved = personRepository.save(person);
         return mapper.map(saved, PersonResponse.class);
     }
