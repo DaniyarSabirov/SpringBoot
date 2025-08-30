@@ -1,5 +1,7 @@
 package Firstprojekt.Firstprojekt.controller;
 
+import Firstprojekt.Firstprojekt.dto.PersonCreateRequest;
+import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.service.PersonService;
@@ -22,14 +24,14 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PersonResponse> addPerson(@RequestBody @Valid Person person) {
-        return ResponseEntity.status(201).body(personService.addPerson(person));
+    public ResponseEntity<PersonResponse> addPerson(@RequestBody @Valid PersonCreateRequest personDto) {
+        return ResponseEntity.status(201).body(personService.addPerson(personDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long id,
-                                                       @RequestBody @Valid Person newPerson){
-        return ResponseEntity.ok(personService.updatePerson(newPerson, id));
+                                                       @RequestBody @Valid PersonPatchRequest personDto){
+        return ResponseEntity.ok(personService.updatePerson(personDto, id));
     }
 
     @DeleteMapping("/{id}")
