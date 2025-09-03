@@ -5,7 +5,11 @@ import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.repository.PersonRepository;
+import org.apache.coyote.Request;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,12 +27,12 @@ public class PersonService {
         this.mapper = mapper;
     }
 
-    public List<PersonResponse> getPeople(){
-        return personRepository.findAll()
-                .stream()
-                .map(p -> mapper.map(p, PersonResponse.class))
-                .toList();
+    public Page<PersonResponse> getPeople(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return personRepository.findAll(pageable)
+                .map(p -> mapper.map(p, PersonResponse.class));
     }
+
 
     public PersonResponse addPerson(PersonCreateRequest personDto) {
         Person saved = personRepository.save(mapper.map(personDto, Person.class));
