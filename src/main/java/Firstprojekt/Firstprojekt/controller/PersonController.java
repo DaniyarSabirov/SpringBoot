@@ -3,13 +3,11 @@ package Firstprojekt.Firstprojekt.controller;
 import Firstprojekt.Firstprojekt.dto.PersonCreateRequest;
 import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
-import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.service.PersonService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/people")
@@ -19,8 +17,15 @@ public class PersonController {
     public PersonController(PersonService personService) { this.personService = personService; }
 
     @GetMapping
-    public ResponseEntity<List<PersonResponse>> getPeople() {
-        return ResponseEntity.ok(personService.getPeople());
+    public ResponseEntity<Page<PersonResponse>> getPeople
+            (@RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(personService.getPeople(page, size));
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> getMessage(@RequestParam String message){
+        return ResponseEntity.ok(message);
     }
 
     @PostMapping("/add")
