@@ -5,9 +5,9 @@ import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.service.PersonService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/people")
@@ -17,7 +17,7 @@ public class PersonController {
     public PersonController(PersonService personService) { this.personService = personService; }
 
     @GetMapping
-    public ResponseEntity<Page<PersonResponse>> getPeople
+    public ResponseEntity<PersonResponse> getPeople
             (@RequestParam(defaultValue = "0") int page,
              @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(personService.getPeople(page, size));

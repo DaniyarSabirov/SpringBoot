@@ -5,7 +5,6 @@ import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.repository.PersonRepository;
-import org.apache.coyote.Request;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +25,28 @@ public class PersonService {
         this.personRepository = personRepository;
         this.mapper = mapper;
     }
-
-    public Page<PersonResponse> getPeople(int page, int size){
+    public PersonResponse getPeople(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return personRepository.findAll(pageable)
-                .map(p -> mapper.map(p, PersonResponse.class));
+        Page<Person> personsPage = personRepository.findAll(pageable);
+
+        List<PersonPatchRequest> personDtoList = personsPage.getContent()
+                .stream()
+                .map(person -> new PersonPatchRequest(
+                        person.getName(),
+                        person.getAge(),
+                        person.getWorkEmail()
+                ))
+                .toList();
+
+        return PersonResponse.builder()
+                .personDto(personDtoList)
+                .last(personsPage.isLast())
+                .totalElements((int) personsPage.getTotalElements())
+                .totalPages(personsPage.getTotalPages())
+                .first(personsPage.isFirst())
+                .size(personsPage.getSize())
+                .number(personsPage.getNumber())
+                .build();
     }
 
 
