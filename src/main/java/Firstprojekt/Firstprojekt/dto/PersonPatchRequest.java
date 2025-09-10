@@ -3,15 +3,19 @@ package Firstprojekt.Firstprojekt.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor
 public class PersonPatchRequest {
+
+    @NonNull
     @Size(min = 2, max = 50, message = "{person.name.size}")
     private String name;
 
+    @NonNull
     @Min(value = 0,  message = "{person.age.min}")
     @Max(value = 150, message = "{person.age.max}")
     private Integer age;
 
+    @NonNull
     @Size(min = 2, max = 50, message = "{person.workEmail.size}")
     @Email(message = "{person.workEmail.email}")
     private String workEmail;
@@ -19,4 +23,5 @@ public class PersonPatchRequest {
     @Size(min = 2, max = 50, message = "{person.privateEmail.size}")
     @Email(message = "{person.privateEmail.email}")
     private String privateEmail;
+
 }
