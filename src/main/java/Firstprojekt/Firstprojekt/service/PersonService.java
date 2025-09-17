@@ -1,6 +1,7 @@
 package Firstprojekt.Firstprojekt.service;
 
 import Firstprojekt.Firstprojekt.dto.PersonCreateRequest;
+import Firstprojekt.Firstprojekt.dto.PersonDto;
 import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
@@ -29,38 +30,32 @@ public class PersonService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Person> personsPage = personRepository.findAll(pageable);
 
-        List<PersonPatchRequest> personDtoList = personsPage.getContent()
-                .stream()
-                .map(person -> new PersonPatchRequest(
-                        person.getName(),
-                        person.getAge(),
-                        person.getWorkEmail()
-                ))
-                .toList();
+        List<PersonDto> listPersonDto = personsPage.getContent()
+                .stream().map(person -> mapper.map(person, PersonDto.class)).toList();
 
         return PersonResponse.builder()
-                .personDto(personDtoList)
+                .personDto(listPersonDto)
                 .last(personsPage.isLast())
                 .totalElements((int) personsPage.getTotalElements())
                 .totalPages(personsPage.getTotalPages())
                 .first(personsPage.isFirst())
                 .size(personsPage.getSize())
-                .number(personsPage.getNumber())
+                .pageNumber(personsPage.getNumber())
                 .build();
     }
 
 
-    public PersonResponse addPerson(PersonCreateRequest personDto) {
-        Person saved = personRepository.save(mapper.map(personDto, Person.class));
-        return mapper.map(saved, PersonResponse.class);
+    public PersonDto addPerson(PersonCreateRequest personCreateRequest) {
+        Person saved = personRepository.save(mapper.map(personCreateRequest, Person.class));
+        return mapper.map(saved, PersonDto.class);
     }
 
-    public PersonResponse updatePerson(PersonPatchRequest personDto, Long id){
+    public PersonDto updatePerson(PersonPatchRequest personPatchRequest, Long id){
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        mapper.map(personDto, person);
+        mapper.map(personPatchRequest, person);
         Person saved = personRepository.save(person);
-        return mapper.map(saved, PersonResponse.class);
+        return mapper.map(saved, PersonDto.class);
     }
 
     public boolean deletePerson(Long id){
@@ -68,5 +63,10 @@ public class PersonService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         personRepository.deleteById(id);
         return true;
+    }
+
+    public PersonDto findPersonById(Long id) {
+        return mapper.map(personRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND)), PersonDto.class);
     }
 }

@@ -1,10 +1,13 @@
 package Firstprojekt.Firstprojekt.controller;
 
 import Firstprojekt.Firstprojekt.dto.PersonCreateRequest;
+import Firstprojekt.Firstprojekt.dto.PersonDto;
 import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
+import Firstprojekt.Firstprojekt.model.Person;
 import Firstprojekt.Firstprojekt.service.PersonService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,20 +32,23 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PersonResponse> addPerson(@RequestBody @Valid PersonCreateRequest personDto) {
-        return ResponseEntity.status(201).body(personService.addPerson(personDto));
+    public ResponseEntity<PersonDto> addPerson(@RequestBody @Valid PersonCreateRequest personCreateRequest) {
+        return ResponseEntity.status(201).body(personService.addPerson(personCreateRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long id,
-                                                       @RequestBody @Valid PersonPatchRequest personDto){
+    public ResponseEntity<PersonDto> updatePerson(@PathVariable Long id,
+                                                  @RequestBody @Valid PersonPatchRequest personDto){
         return ResponseEntity.ok(personService.updatePerson(personDto, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePerson(@PathVariable Long id) {
+    public ResponseEntity<PersonDto> deletePerson(@PathVariable Long id) {
+
+        PersonDto personDto = personService.findPersonById(id);
+
         boolean removed = personService.deletePerson(id);
-        return removed ? ResponseEntity.ok("Person deleted successfully.")
-                : ResponseEntity.status(404).body("Person not found.");
+        return removed ? ResponseEntity.ok(personDto)
+                : ResponseEntity.status(404).body(personDto);
     }
 }
