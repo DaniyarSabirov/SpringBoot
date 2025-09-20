@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,8 +27,12 @@ public class PersonService {
         this.personRepository = personRepository;
         this.mapper = mapper;
     }
-    public PersonResponse getPeople(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PersonResponse getPeople(int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<Person> personsPage = personRepository.findAll(pageable);
 
         List<PersonDto> listPersonDto = personsPage.getContent()
