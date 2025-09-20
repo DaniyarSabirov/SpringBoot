@@ -28,4 +28,6 @@ public class PersonDto {
     @Email(message = "{person.workEmail.email}")
     private String workEmail;
 
+    private AddressDto addressDto;
+
 }

@@ -43,4 +43,9 @@ public class Person {
     @Column(nullable = false)
     private String privateEmail;
 
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
+
 }

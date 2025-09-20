@@ -22,8 +22,10 @@ public class PersonController {
     @GetMapping
     public ResponseEntity<PersonResponse> getPeople
             (@RequestParam(defaultValue = "0") int page,
-             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(personService.getPeople(page, size));
+             @RequestParam(defaultValue = "10") int size,
+             @RequestParam(defaultValue = "name") String sortBy,
+             @RequestParam(defaultValue = "asc") String direction){
+        return ResponseEntity.ok(personService.getPeople(page, size, sortBy, direction));
     }
 
     @GetMapping("/hello")
