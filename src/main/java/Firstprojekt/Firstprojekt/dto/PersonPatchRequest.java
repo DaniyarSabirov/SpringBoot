@@ -24,4 +24,7 @@ public class PersonPatchRequest {
     @Email(message = "{person.privateEmail.email}")
     private String privateEmail;
 
+    @NotNull(message = "{addressDto.addressDto.notNull}")
+    private AddressDto addressDto;
+
 }

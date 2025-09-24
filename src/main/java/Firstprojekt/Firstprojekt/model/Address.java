@@ -19,7 +19,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @NotNull
     @NotBlank(message = "{address.city.notBlank}")
     @Size(min = 1, max = 50, message = "{address.city.size}")

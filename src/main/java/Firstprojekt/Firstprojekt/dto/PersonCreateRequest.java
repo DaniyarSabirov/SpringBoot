@@ -1,4 +1,5 @@
 package Firstprojekt.Firstprojekt.dto;
+import Firstprojekt.Firstprojekt.model.Address;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -24,4 +25,9 @@ import lombok.*;
         @Size(min = 2, max = 50, message = "{person.privateEmail.size}")
         @Email(message = "{person.privateEmail.email}")
         private String privateEmail;
+
+        @NotNull(message = "{addressDto.addressDto.notNull}")
+        private AddressDto addressDto;
+
+
 }

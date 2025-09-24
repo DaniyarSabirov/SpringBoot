@@ -28,6 +28,7 @@ public class PersonDto {
     @Email(message = "{person.workEmail.email}")
     private String workEmail;
 
+    @NonNull
     private AddressDto addressDto;
 
 }
