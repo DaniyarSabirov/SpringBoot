@@ -40,8 +40,8 @@ public class PersonController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PersonDto> updatePerson(@PathVariable Long id,
-                                                  @RequestBody @Valid PersonPatchRequest personDto){
-        return ResponseEntity.ok(personService.updatePerson(personDto, id));
+                                                  @RequestBody @Valid PersonPatchRequest personPatchRequest){
+        return ResponseEntity.ok(personService.updatePerson(personPatchRequest, id));
     }
 
     @DeleteMapping("/{id}")
