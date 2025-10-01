@@ -5,6 +5,8 @@ import Firstprojekt.Firstprojekt.dto.PersonDto;
 import Firstprojekt.Firstprojekt.dto.PersonPatchRequest;
 import Firstprojekt.Firstprojekt.dto.PersonResponse;
 import Firstprojekt.Firstprojekt.model.Person;
+import Firstprojekt.Firstprojekt.repository.HobbyRepository;
+import Firstprojekt.Firstprojekt.repository.PersonRepository;
 import Firstprojekt.Firstprojekt.service.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/people")
 public class PersonController {
-
     private final PersonService personService;
+
     public PersonController(PersonService personService) { this.personService = personService; }
 
     @GetMapping
@@ -52,5 +54,16 @@ public class PersonController {
         boolean removed = personService.deletePerson(id);
         return removed ? ResponseEntity.ok(personDto)
                 : ResponseEntity.status(404).body(personDto);
+    }
+
+
+
+    @PutMapping("/{personId}/hobbies/{hobbyId}")
+    public ResponseEntity<Person> addHobbyToPerson(
+            @PathVariable Long personId,
+            @PathVariable Long hobbyId) {
+
+        return ResponseEntity.ok(personService.addHobbyToPerson(personId, hobbyId));
+
     }
 }
