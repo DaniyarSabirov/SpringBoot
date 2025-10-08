@@ -26,4 +26,9 @@ public class HobbyController {
     public Hobby create(@RequestBody Hobby hobby) {
         return hobbyRepository.save(hobby);
     }
+
+    @GetMapping("/stats")
+    public List<Hobby[]> getStats() {
+        return hobbyRepository.countPersonsByHobby();
+    }
 }
