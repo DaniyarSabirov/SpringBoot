@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/people")
@@ -56,14 +58,21 @@ public class PersonController {
                 : ResponseEntity.status(404).body(personDto);
     }
 
-
-
     @PutMapping("/{personId}/hobbies/{hobbyId}")
     public ResponseEntity<Person> addHobbyToPerson(
             @PathVariable Long personId,
             @PathVariable Long hobbyId) {
 
         return ResponseEntity.ok(personService.addHobbyToPerson(personId, hobbyId));
+    }
 
+    @GetMapping("/by-hobby/{name}")
+    public List<Person> getByHobby(@PathVariable String name) {
+        return personService.findByHobbyName(name);
+    }
+
+    @GetMapping("/by-city/{city}")
+    public List<Person> getByCity(@PathVariable String city) {
+        return personService.findByCity(city);
     }
 }

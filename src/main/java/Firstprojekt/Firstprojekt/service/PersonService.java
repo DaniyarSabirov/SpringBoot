@@ -96,4 +96,11 @@ public class PersonService {
         return person;
     }
 
+    public List<Person> findByHobbyName(String name) {
+        return personRepository.findByHobbyName(name);
+    }
+
+    public List<Person> findByCity(String city) {
+        return personRepository.findByCity(city);
+    }
 }
